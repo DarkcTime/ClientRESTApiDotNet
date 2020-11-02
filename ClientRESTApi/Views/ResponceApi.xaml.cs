@@ -13,16 +13,17 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ClientRESTApi
+namespace ClientRESTApi.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for ResponceApi.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class ResponceApi : Page
     {
-        public MainWindow()
+        public ResponceApi(string responceMessage)
         {
             InitializeComponent();
+            this.TxtResponce.Text = responceMessage; 
         }
     }
 }
