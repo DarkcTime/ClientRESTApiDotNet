@@ -1,4 +1,5 @@
 ﻿using ClientRESTApi.BackEnd;
+using ClientRESTApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+//using System.Web.Script.Serialization;
 
 namespace ClientRESTApi.Views
 {
@@ -20,28 +22,54 @@ namespace ClientRESTApi.Views
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-    {
+    { 
+
         public MainWindow()
         {
             InitializeComponent();
- 
+            new History(); 
         }
 
         private void GoClick(object sender, RoutedEventArgs e)
         {
-            if (!string.IsNullOrWhiteSpace(this.TxtUrl.Text) && this.CmbMethods.SelectedItem != null)
+        
+            if (!string.IsNullOrWhiteSpace(this.TxtUrl.Text))
             {
+                //get url request
                 string url = this.TxtUrl.Text;
-                string method = "GET";
+                //get method request
+                string method = this.CmbMethods.Text;           
+
                 RestClient restClient = new RestClient(url, method);
-                string responce = restClient.GetResponce(); 
-                this.MainFrame.Content = new ResponceApi(responce);
+                if (restClient.MakeRequest()){
+                    Request request = restClient.GetResponce();
+                    SetResponce(request.Responce);
+                    UpdateHistory(request);
+                }
+                else
+                {
+                    this.TxtUrl.Focus(); 
+                }
+
+
             }
             else
             {
-                //if not fill 
+                SharedClass.MessageBoxWarning("Введите URL адрес");
             }
+            
 
         }
+        private void SetResponce(string responce)
+        {
+            this.TxtResponce.Text = responce;  
+        }
+
+        private void UpdateHistory(Request request)
+        {
+            History.AddRequest(request);
+            this.HistoryList.ItemsSource = History.ListRequest; 
+        }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClientRESTApi.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,37 +12,63 @@ namespace ClientRESTApi.BackEnd
 {
     class RestClient
     {
-        private string Url { get; set; }
-        private string HttpMethod { get; set; }
+        private Request request = new Request(); 
+       
+        
         public RestClient(string url, string method)
         {
-            Url = url;
-            HttpMethod = method;
-            MakeRequest();  
+            request.Url = url;
+            request.Method = method;
+            request.Responce = string.Empty; 
         }
-        private HttpWebRequest request; 
-        private void MakeRequest()
+        private HttpWebRequest httpWebRequest; 
+        public bool MakeRequest()
         {
-            request = (HttpWebRequest)WebRequest.Create(Url);
-            request.Method = HttpMethod;
+            try
+            {
+                httpWebRequest = (HttpWebRequest)WebRequest.Create(request.Url);
+                httpWebRequest.Method = request.Method;
+                return true; 
+            }
+            catch(UriFormatException ufe)
+            {
+                SharedClass.MessageBoxError(ufe.Message, "Not valid URI");
+            }
+            catch(Exception ex)
+            {
+                SharedClass.MessageBoxError(ex); 
+            }
+
+            return false; 
         }
 
-        public string GetResponce()
+        public Request GetResponce()
         {
-            using(HttpWebResponse responce = (HttpWebResponse)request.GetResponse())
+            using(HttpWebResponse responce = (HttpWebResponse)httpWebRequest.GetResponse())
             {
-                if (responce == null) return "Responce == null"; 
+                if (responce == null)
+                {
+                    request.Responce = "Responce == null";
+                    return request; 
+                }
                 using(Stream stream = responce.GetResponseStream())
                 {
-                    if (stream == null) return "Stream == nyll"; 
+                    if (stream == null)
+                    {
+                        request.Responce = "Stream == null";
+                    }
+
                     using(StreamReader read = new StreamReader(stream))
                     {
-                        string result = read.ReadToEnd();
-                        if (result == "") return "Responce result empty";
-                        return result; 
+                        request.Responce = read.ReadToEnd();
+                        if (request.Responce == "")
+                        {
+                            request.Responce = "Responce result empty";
+                        }
                     }
                 }
             }
+            return request; 
         }
 
 

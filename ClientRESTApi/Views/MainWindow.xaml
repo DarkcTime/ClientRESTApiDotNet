@@ -5,34 +5,50 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClientRESTApi"
         mc:Ignorable="d"
-        Title="REST Api Client" Height="450" Width="600">
+        Title="REST Api Client" Height="450" Width="600" Icon="/ClientRESTApi;component/Resources/icon.png">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="0.5*"/>
-            <RowDefinition />
-            <RowDefinition Height="6*"/>
-        </Grid.RowDefinitions>
+       
         <TabControl>
-            <TabItem Header="Request">Request</TabItem>
-            <TabItem Header="History">History</TabItem>
+            <TabItem Header="Request">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition Height="6*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <ComboBox Style="{StaticResource ComboBoxStyle}" Name="CmbMethods" SelectedIndex="0">
+                            <ComboBoxItem>GET</ComboBoxItem>
+                            <ComboBoxItem>POST</ComboBoxItem>
+                            <ComboBoxItem>PUT</ComboBoxItem>
+                            <ComboBoxItem>DELETE</ComboBoxItem>
+                        </ComboBox>
+                        <TextBox Grid.Column="1" Style="{StaticResource TextBoxStyle}" Name="TxtUrl"></TextBox>
+                        <Button Grid.Column="2" Style="{StaticResource ButtonStyle}" Click="GoClick">Go</Button>
+                    </Grid>
+                    <TextBox Grid.Row="1" Margin="20" Name="TxtResponce" IsEnabled="False"></TextBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="History">
+                <ListView Name="HistoryList">
+                    <ListView.View>
+                        <GridView>
+                            <GridView.Columns>
+                                <GridViewColumn Header="Method" DisplayMemberBinding="{Binding Path=Method}"></GridViewColumn>
+                                <GridViewColumn Header="URL" DisplayMemberBinding="{Binding Path=Url}"></GridViewColumn>
+                                <GridViewColumn Header="Responce" DisplayMemberBinding="{Binding Path=Responce}"></GridViewColumn>
+                            </GridView.Columns>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </TabItem>
+            
+            
         </TabControl>
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition Width="3*"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <ComboBox Style="{StaticResource ComboBoxStyle}" Name="CmbMethods" SelectedIndex="0">
-                <ComboBoxItem>GET</ComboBoxItem>
-                <ComboBoxItem>POST</ComboBoxItem>
-                <ComboBoxItem>PUT</ComboBoxItem>
-                <ComboBoxItem>DELETE</ComboBoxItem>
-            </ComboBox>
-            <TextBox Grid.Column="1" Style="{StaticResource TextBoxStyle}" Name="TxtUrl"></TextBox>
-            <Button Grid.Column="2" Style="{StaticResource ButtonStyle}" Click="GoClick">Go</Button>
-        </Grid>
-        <Frame Grid.Row="2" Name="MainFrame">
-        
-        </Frame>
+       
     </Grid>
 </Window>
