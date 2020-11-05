@@ -5,10 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClientRESTApi"
         mc:Ignorable="d"
-        Title="REST Api Client" Height="450" Width="600" Icon="/ClientRESTApi;component/Resources/icon.png">
+        Title="REST Api Client" Height="450" Width="600" WindowStartupLocation="CenterOwner" ResizeMode="CanResize"
+        Icon="/ClientRESTApi;component/Resources/icon.png"
+        MinHeight="450" MinWidth="600"
+        >
     <Grid>
        
-        <TabControl>
+        <TabControl SelectionChanged="TabControl_SelectionChanged">
             <TabItem Header="Request">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -21,16 +24,30 @@
                             <ColumnDefinition Width="3*"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <ComboBox Style="{StaticResource ComboBoxStyle}" Name="CmbMethods" SelectedIndex="0">
-                            <ComboBoxItem>GET</ComboBoxItem>
-                            <ComboBoxItem>POST</ComboBoxItem>
-                            <ComboBoxItem>PUT</ComboBoxItem>
-                            <ComboBoxItem>DELETE</ComboBoxItem>
+                        <ComboBox HorizontalAlignment="Left" Margin="10 0 0 0" Style="{StaticResource ComboBoxStyle}" Name="CmbMethods" SelectedIndex="0">
                         </ComboBox>
-                        <TextBox Grid.Column="1" Style="{StaticResource TextBoxStyle}" Name="TxtUrl"></TextBox>
-                        <Button Grid.Column="2" Style="{StaticResource ButtonStyle}" Click="GoClick">Go</Button>
+                        <TextBox Grid.Column="1" Height="30" Margin="10 0 10 0" Name="TxtUrl"></TextBox>
+                        <Button HorizontalAlignment="Right" Margin="0 0 10 0" Grid.Column="2" Style="{StaticResource ButtonStyle}" Click="GoClick">Go</Button>
                     </Grid>
-                    <TextBox Grid.Row="1" Margin="20" Name="TxtResponce" IsEnabled="False"></TextBox>
+                    <TabControl Grid.Row="1" Margin="10">
+                        <TabItem Header="Responce">
+                            <TextBox Grid.Row="1" TextWrapping="Wrap"
+                                     Margin="10" 
+                                     Name="TxtResponce" 
+                                     IsReadOnly="True"
+                                     VerticalScrollBarVisibility="Visible"
+                                     AcceptsReturn="True"></TextBox>
+                        </TabItem>
+                        <TabItem Header="Body">
+                            <TextBox Grid.Row="1" 
+                                     TextWrapping="Wrap" 
+                                     Margin="10" 
+                                     Name="TxtBody"                                      
+                                     VerticalScrollBarVisibility="Visible"
+                                     AcceptsReturn="True"></TextBox>
+                        </TabItem>
+                    </TabControl>
+                    
                 </Grid>
             </TabItem>
             <TabItem Header="History">
