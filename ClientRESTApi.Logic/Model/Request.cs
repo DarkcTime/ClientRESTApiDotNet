@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ClientRESTApi.Logic.Model
 {
+    /// <summary>
+    /// Object for work with eequests 
+    /// </summary>
     public class Request
     {
         public string Url { get; set; }
@@ -17,6 +20,7 @@ namespace ClientRESTApi.Logic.Model
     }
 
     public class MethodsRepository{
+        //get all enum methods
         public static List<Methods> GetMethods()
         {
             List<Methods> methods = new List<Methods>();

@@ -23,9 +23,7 @@ namespace ClientRESTApi.Views
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-    {
-        public static string Person { get; private set; }
-
+    {        
         public MainWindow()
         {
             InitializeComponent();
@@ -33,6 +31,10 @@ namespace ClientRESTApi.Views
             this.CmbMethods.ItemsSource = MethodsRepository.GetMethods();
         }
 
+
+        /// <summary>
+        /// Button Click. Send request and get responce 
+        /// </summary>
         private void GoClick(object sender, RoutedEventArgs e)
         {
             try
@@ -45,12 +47,14 @@ namespace ClientRESTApi.Views
                     //get method request
                     Methods method = (Methods)this.CmbMethods.SelectedItem;
 
+                    //check condition body 
                     if (string.IsNullOrWhiteSpace(this.TxtBody.Text) && 
                         (method.Equals(Methods.POST) || method.Equals(Methods.PUT)))
                     {
                         if (SharedClass.MessageBoxQuestion("Body is Empty. Continue?") == MessageBoxResult.No) return; 
                     }
 
+                    //request generation
                     RestClient restClient = new RestClient(url, method);
                     restClient.MakeRequest();
                     if (method == Methods.POST || method == Methods.PUT)
@@ -58,22 +62,22 @@ namespace ClientRESTApi.Views
                         string body = this.TxtBody.Text;
                         restClient.SetBody(body);
                     }
-
+                    //call request and get responce
                     Request request = restClient.GetResponce();
+                    
+                    //pretty json
                     string responce = request.Responce;
-
                     if (request.Method == Methods.GET)
                     {
                         responce = Serialization.GetJsonSerialize(request.Responce);
                     }
-
                     SetResponce(responce);
 
+                    //add object and update history
                     if(request.Responce.Length > History.MAXLENGHTRESPONCE)
                     {
                         request.Responce = request.Responce.Substring(0, History.MAXLENGHTRESPONCE); 
                     }
-
                     UpdateHistory(request);
 
                 }
@@ -93,11 +97,13 @@ namespace ClientRESTApi.Views
           
 
         }
+        //set value for textBox - Responce 
         private void SetResponce(string responce)
         {
             this.TxtResponce.Text = responce;
         }
 
+        //add request in history list and update history 
         private void UpdateHistory(Request request)
         {
             History.AddRequest(request);
@@ -105,9 +111,5 @@ namespace ClientRESTApi.Views
             this.HistoryList.ItemsSource = History.ListRequest;
         }
 
-        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
     }
 }

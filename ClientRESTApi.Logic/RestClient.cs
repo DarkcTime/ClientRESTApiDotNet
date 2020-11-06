@@ -10,6 +10,9 @@ using ClientRESTApi.Logic.Model;
 
 namespace ClientRESTApi.Logic
 {
+    /// <summary>
+    /// Client for make request in Api
+    /// </summary>
     public class RestClient
     {
         private Request request = new Request();
@@ -29,6 +32,11 @@ namespace ClientRESTApi.Logic
            httpWebRequest.Method = request.Method.ToString();
            
         }
+
+        /// <summary>
+        /// set body parametr for request
+        /// </summary>
+        /// <param name="json">string in format json</param>
         public void SetBody(string json)
         {
             using (StreamWriter sw = new StreamWriter(httpWebRequest.GetRequestStream()))
@@ -37,6 +45,10 @@ namespace ClientRESTApi.Logic
             }
         }
 
+        /// <summary>
+        /// Call request and get responce 
+        /// </summary>
+        /// <returns>request object with set Responce property</returns>
         public Request GetResponce()
         {            
             using (HttpWebResponse responce = (HttpWebResponse)httpWebRequest.GetResponse())
