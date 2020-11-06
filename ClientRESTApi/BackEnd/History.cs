@@ -10,12 +10,16 @@ namespace ClientRESTApi.BackEnd
 {
     class History
     {
-        public static List<Request> ListRequest {get;set;}
+        public static List<Request> ListRequest { get; set; }
+        public static int MAXLENGHTRESPONCE { get; private set; }
+
         public History()
         {
             ListRequest = new List<Request>();
+            MAXLENGHTRESPONCE = 100; 
         }
 
+        
         public static void AddRequest(Request request)
         {
             ListRequest.Add(request);    

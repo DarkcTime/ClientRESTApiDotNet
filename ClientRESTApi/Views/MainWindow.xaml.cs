@@ -39,10 +39,17 @@ namespace ClientRESTApi.Views
             {
                 if (!string.IsNullOrWhiteSpace(this.TxtUrl.Text))
                 {
+                    
                     //get url request
                     string url = this.TxtUrl.Text;
                     //get method request
                     Methods method = (Methods)this.CmbMethods.SelectedItem;
+
+                    if (string.IsNullOrWhiteSpace(this.TxtBody.Text) && 
+                        (method.Equals(Methods.POST) || method.Equals(Methods.PUT)))
+                    {
+                        if (SharedClass.MessageBoxQuestion("Body is Empty. Continue?") == MessageBoxResult.No) return; 
+                    }
 
                     RestClient restClient = new RestClient(url, method);
                     restClient.MakeRequest();
@@ -60,10 +67,14 @@ namespace ClientRESTApi.Views
                         responce = Serialization.GetJsonSerialize(request.Responce);
                     }
 
-
                     SetResponce(responce);
-                    UpdateHistory(request);
 
+                    if(request.Responce.Length > History.MAXLENGHTRESPONCE)
+                    {
+                        request.Responce = request.Responce.Substring(0, History.MAXLENGHTRESPONCE); 
+                    }
+
+                    UpdateHistory(request);
 
                 }
                 else
@@ -71,9 +82,13 @@ namespace ClientRESTApi.Views
                     SharedClass.MessageBoxWarning("Enter the URL address");
                 }
             }
-            catch (UriFormatException UFE)
+            catch (UriFormatException ufe)
             {
                 SharedClass.MessageBoxWarning("Invalid URL format", "URL Format");
+            }
+            catch (Exception ex)
+            {
+                SharedClass.MessageBoxError(ex);
             }
           
 
@@ -86,6 +101,7 @@ namespace ClientRESTApi.Views
         private void UpdateHistory(Request request)
         {
             History.AddRequest(request);
+            this.HistoryList.ItemsSource = null; 
             this.HistoryList.ItemsSource = History.ListRequest;
         }
 
